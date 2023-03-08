@@ -108,3 +108,32 @@ def deleteEntry():
         'message': 'Budget updated successfully'
     }
 
+@api.route('/api/budget/paychecks', methods=['GET'])
+@token_auth.login_required
+def get_paychecks():
+    user = token_auth.current_user()
+    user_id = user.user_id
+    
+    paychecks = IncomeDeduction.query.filter_by(category='income', user_id=user_id).all()
+    
+    paycheck_list = [paycheck.to_dict() for paycheck in paychecks]
+
+    return {
+        'status': 'ok',
+        'paychecks': paycheck_list
+    }
+
+@api.route('/api/budget/bills', methods=['GET'])
+@token_auth.login_required
+def get_bills():
+    user = token_auth.current_user()
+    user_id = user.user_id
+    
+    bills = IncomeDeduction.query.filter_by(category='deduction', user_id=user_id).all()
+    
+    bill_list = [bill.to_dict() for bill in bills]
+
+    return {
+        'status': 'ok',
+        'bills': bill_list
+    }
