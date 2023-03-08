@@ -1,7 +1,6 @@
 from flask import Blueprint, request
 from ..models import User, IncomeDeduction
-from ..apiauthhelper import basic_auth_required, token_auth_required, basic_auth, token_auth
-from flask_cors import cross_origin
+from ..apiauthhelper import basic_auth, token_auth
 api = Blueprint('api', __name__)
 
 
