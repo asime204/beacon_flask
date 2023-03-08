@@ -53,16 +53,14 @@ class IncomeDeduction(db.Model):
     amount = db.Column(db.Float, nullable=False)
     trans_date = db.Column(db.Date, nullable=False)
     category = db.Column(db.String(20), nullable=False)
-    due_date = db.Column(db.Date, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
 
-    def __init__(self, title, amount, category, trans_date, user_id, due_date=None):
+    def __init__(self, title, amount, category, trans_date, user_id):
         self.title = title
         self.amount = amount
         self.category = category
         self.trans_date = trans_date
         self.user_id = user_id
-        self.due_date = due_date
 
     def is_income(self):
         return self.category == 'income'
@@ -85,7 +83,6 @@ class IncomeDeduction(db.Model):
             'amount': self.amount,
             'income_type': 'income' if self.is_income() else 'deduction',
             'trans_date': self.trans_date.isoformat() if self.trans_date else None,
-            'due_date': self.due_date.isoformat() if self.due_date else None,
             'user_id': self.user_id
         }
 

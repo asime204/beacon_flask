@@ -66,7 +66,7 @@ def updateBudget():
 
     if 'bills' in data:
         for bill in data['bills']:
-            deduction = IncomeDeduction(bill['title'], float(bill['amount']), 'deduction', bill['due_date'], user_id)
+            deduction = IncomeDeduction(bill['title'], float(bill['amount']), 'deduction', bill['trans_date'], user_id)
             deduction.save()
 
     return {
@@ -89,14 +89,22 @@ def deleteEntry():
             income = IncomeDeduction.query.filter_by(title=paycheck['title'], amount=float(paycheck['amount']), trans_date=paycheck['trans_date'], user_id=user_id).first()
             if income:
                 income.delete()
+                print(f"Paycheck '{paycheck['title']}' deleted for user '{user.username}'")
+            else:
+                print(f"No paycheck found with title '{paycheck['title']}' for user '{user.username}'")
 
     if 'bills' in data:
         for bill in data['bills']:
-            deduction = IncomeDeduction.query.filter_by(title=bill['title'], amount=float(bill['amount']), due_date=bill['due_date'], user_id=user_id).first()
+            deduction = IncomeDeduction.query.filter_by(title=bill['title'], amount=float(bill['amount']), trans_date=bill['trans_date'], user_id=user_id).first()
             if deduction:
+                print('Deleting bill:', bill['title'])
                 deduction.delete()
+                print(f"Bill '{bill['title']}' deleted for user '{user.username}'")
+            else:
+                print(f"No bill found with title '{bill['title']}' for user '{user.username}'")
 
     return {
         'status': 'ok',
         'message': 'Budget updated successfully'
     }
+
